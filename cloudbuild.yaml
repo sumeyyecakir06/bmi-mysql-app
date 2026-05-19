@@ -15,21 +15,21 @@ steps:
     - 'get-credentials'
     - 'bmi-cluster'
     - '--zone'
-    - 'us-west1-b'
+    - 'europe-west1-b'
     - '--project'
     - 'bmi-final-proje'
 
   - name: 'gcr.io/cloud-builders/kubectl'
     args: ['set', 'image', 'deployment/bmi-deployment', 'bmi-app=europe-west1-docker.pkg.dev/bmi-final-proje/bmi-repo/bmi-app:$COMMIT_SHA', '-n', 'bmi-app']
     env:
-    - 'CLOUDSDK_COMPUTE_ZONE=us-west1-b'
+    - 'CLOUDSDK_COMPUTE_ZONE=europe-west1-b'
     - 'CLOUDSDK_CONTAINER_CLUSTER=bmi-cluster'
     - 'CLOUDSDK_CORE_PROJECT=bmi-final-proje'
 
   - name: 'gcr.io/cloud-builders/kubectl'
     args: ['rollout', 'status', 'deployment/bmi-deployment', '-n', 'bmi-app', '--timeout=5m']
     env:
-    - 'CLOUDSDK_COMPUTE_ZONE=us-west1-b'
+    - 'CLOUDSDK_COMPUTE_ZONE=europe-west1-b'
     - 'CLOUDSDK_CONTAINER_CLUSTER=bmi-cluster'
     - 'CLOUDSDK_CORE_PROJECT=bmi-final-proje'
 
