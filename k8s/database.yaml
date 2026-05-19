@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: bmi-db-service
+  namespace: bmi-app
+spec:
+  type: ClusterIP
+  selector:
+    app: bmi-mysql
+  ports:
+    - port: 3306
+      targetPort: 3306
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: bmi-db-stateful
+  namespace: bmi-app
+spec:
+  serviceName: "bmi-db-service"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bmi-mysql
+  template:
+    metadata:
+      labels:
+        app: bmi-mysql
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8.0
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: bmi-db-secret
+                  key: MYSQL_ROOT_PASSWORD
+            - name: MYSQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: bmi-db-secret
+                  key: MYSQL_DATABASE
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - name: db-storage
+              mountPath: /var/lib/mysql
+  volumeClaimTemplates:
+    - metadata:
+        name: db-storage
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 2Gi
