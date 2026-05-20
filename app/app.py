@@ -61,7 +61,7 @@ HTML_TEMPLATE = '''
 <body>
     <div class="container">
         <h1>BMI Hesaplayıcı</h1>
-        <div class="badge" id="versionBadge">EnSon</div>
+        <div class="badge" id="versionBadge">xxxxx</div>
         <input type="number" id="weight" placeholder="Kilo (kg)">
         <input type="number" id="height" placeholder="Boy (cm)">
         <button onclick="calculateBMI()">Hesapla</button>
